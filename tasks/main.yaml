@@ -1,0 +1,43 @@
+---
+# gopherbot listed in it's applications
+- name: Create Gopherbot install directory
+  file:
+    path: "{{ gopherbot_install_dir }}"
+    state: directory
+    mode: 0755
+- name: Download Gopherbot archive
+  unarchive:
+    src: "{{ gopherbot_archive }}"
+    dest: "{{ gopherbot_install_dir }}"
+    remote_src: yes
+- name: Create installed config directory
+  file:
+    path: "{{ gopherbot_install_dir }}/conf"
+    state: directory
+- name: Install per-server gopherbot.yaml
+  template:
+    src: gopherbot_yaml.j2
+    dest: "{{ gopherbot_install_dir }}/conf/gopherbot.yaml"
+    owner: root
+    group: root
+    mode: 0644
+- name: Install per-server duo.yaml config
+  template:
+    src: gopherbot_duo.j2
+    dest: "{{ gopherbot_install_dir }}/conf/plugins/duo.yaml"
+    owner: root
+    group: root
+    mode: 0644
+- name: Add systemd unit file for Gopherbot
+  template:
+    src: gopherbot_service.j2
+    dest: /etc/systemd/system/{{ gopherbot_service_name }}.service
+    owner: root
+    group: root
+    mode: 0644
+  register: unit
+- name: Make sure Gopherbot runs on startup
+  systemd: daemon_reload=yes name={{ gopherbot_service_name }} state=started enabled=yes
+  when: unit.changed
+- name: Restart Gopherbot
+  systemd: name={{ gopherbot_service_name }} state=restarted

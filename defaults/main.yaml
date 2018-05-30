@@ -1,4 +1,10 @@
-gopherbot_version: "1.1.2"
+gopherbot_version: "1.1.4"
 gopherbot_platform: "linux"
 gopherbot_install_dir: "/opt/gopherbot"
 gopherbot_service_name: "gopherbot"
+gopherbot_config_dir: "/usr/local/etc/gopherbot"
+# OpenWeatherMap, for weather plugin
+gopherbot_owm_key: your-key
+gopherbot_imgflip_user: you
+gopherbot_imgflip_pass: your-password
+

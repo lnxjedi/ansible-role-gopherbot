@@ -1,0 +1,9 @@
+---
+# ansible-controlled file; see roles/deploy/tasks/deploy_gopherbot.yaml
+Config:
+  TimeoutSeconds: 7200
+  TimeoutType: idle
+  DuoIKey: {{ gopherbot_duo_ikey }}
+  DuoSKey: {{ gopherbot_duo_skey }}
+  DuoHost: {{ gopherbot_duo_host }}
+  DuoUserString: emailUser

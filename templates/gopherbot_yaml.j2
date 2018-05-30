@@ -1,0 +1,26 @@
+# ansible-controlled file; see roles/deploy/tasks/deploy_gopherbot.yaml
+AdminContact: "AWS Team, <awsteam@virginia.edu>"
+# One-character alias the bot can be called by
+Alias: "{{ gopherbot_alias }}"
+# Protocol configuration - required
+Protocol: slack
+ProtocolConfig:
+  SlackToken: "{{ gopherbot_slack_token }}"
+  # Slack maximum message size is 4000 bytes; larger messages will be split
+  # up into at most MaxMessageSplit separate messages, and then truncated
+  MaxMessageSplit: 2
+# Email user
+Email: awsteam@virginia.edu
+MailConfig:
+  Mailhost: {{ ses_host }}:587
+  Authtype: plain
+  User: {{ ses_user }}
+  Password: {{ ses_password }}
+# Port to listen on for http/JSON api calls, for external plugins
+LocalPort: 8880
+# Specify the mechanism for storing the robots memories. Currently only a
+# simple file-based brain is available. Be sure that
+# <local config dir>/brain is writable by the user the robot runs as.
+Brain: file
+BrainConfig:
+  BrainDirectory: brain

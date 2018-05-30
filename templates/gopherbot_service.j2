@@ -1,0 +1,21 @@
+[Unit]
+Description=Gopherbot DevOps Chatbot
+Documentation=https://godoc.org/github.com/uva-its/gopherbot
+After=syslog.target
+After=network.target
+
+[Service]
+Type=simple
+User=robot
+Group=robot
+WorkingDirectory={{ config.install_directory }}
+ExecStart={{ config.install_directory }}/gopherbot -plainlog {{ config.extra_args }}
+Restart=on-failure
+Environment=USER=robot HOME=/opt/robot HOSTNAME=%H
+KillMode=process
+# Give the robot plenty of time to finish plugins currently executing;
+# no new plugins will start after SIGTERM is caught.
+TimeoutStopSec=600
+
+[Install]
+WantedBy=multi-user.target

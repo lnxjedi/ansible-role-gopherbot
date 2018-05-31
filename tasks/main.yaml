@@ -14,14 +14,14 @@
   file:
     path: "{{ gopherbot_install_dir }}/conf"
     state: directory
-- name: Install per-server gopherbot.yaml
+- name: Install gopherbot.yaml
   template:
     src: gopherbot_yaml.j2
     dest: "{{ gopherbot_install_dir }}/conf/gopherbot.yaml"
     owner: root
     group: root
     mode: 0644
-- name: Install per-server duo.yaml config
+- name: Install duo.yaml config
   template:
     src: gopherbot_duo.j2
     dest: "{{ gopherbot_install_dir }}/conf/plugins/duo.yaml"

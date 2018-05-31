@@ -3,8 +3,25 @@ gopherbot_platform: "linux"
 gopherbot_install_dir: "/opt/gopherbot"
 gopherbot_service_name: "gopherbot"
 gopherbot_config_dir: "/usr/local/etc/gopherbot"
+gopherbot_local_port: 8880
+gopherbot_alias: # A single-char alias for the robot, one of: *+^$?\[]{}&!;:-%#@~<>/
+gopherbot_admin_name:
+gopherbot_admin_email:
+# Required
+gopherbot_slack_token:
+# Optional items below
 # OpenWeatherMap, for weather plugin
-gopherbot_owm_key: your-key
-gopherbot_imgflip_user: you
-gopherbot_imgflip_pass: your-password
-
+gopherbot_owm_key:
+# Obtain imgflip credentials to activate the memes plugin
+gopherbot_imgflip_user:
+gopherbot_imgflip_pass:
+# For using the duo elevator plugin
+gopherbot_duo_ikey:
+gopherbot_duo_skey:
+gopherbot_duo_host:
+# For sending email:
+gopherbot_email_from:
+gopherbot_email_host:
+gopherbot_email_auth: none # or plain for user/pass
+gopherbot_email_user:
+gopherbot_email_password:

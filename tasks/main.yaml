@@ -28,6 +28,23 @@
     owner: root
     group: root
     mode: 0644
+  when: gopherbot_duo_ikey is defined
+- name: Install memes.yaml config
+  template:
+    src: gopherbot_memes.j2
+    dest: "{{ gopherbot_install_dir }}/conf/plugins/memes.yaml"
+    owner: root
+    group: root
+    mode: 0644
+  when: gopherbot_imgflip_user is defined
+- name: Install weather.yaml config
+  template:
+    src: gopherbot_weather.j2
+    dest: "{{ gopherbot_install_dir }}/conf/plugins/weather.yaml"
+    owner: root
+    group: root
+    mode: 0644
+  when: gopherbot_own_key is defined
 - name: Add systemd unit file for Gopherbot
   template:
     src: gopherbot_service.j2

@@ -1,17 +1,17 @@
-gopherbot_version: "1.1.4"
+gopherbot_version: "1.1.5"
 gopherbot_platform: "linux"
 gopherbot_install_dir: "/opt/gopherbot"
 gopherbot_service_name: "gopherbot"
 gopherbot_config_dir: "/usr/local/etc/gopherbot"
 gopherbot_local_port: 8880
-gopherbot_alias: # A single-char alias for the robot, one of: *+^$?\[]{}&!;:-%#@~<>/
-gopherbot_admin_name:
-gopherbot_admin_email:
+gopherbot_alias: ; # A single-char alias for the robot, one of: *+^$?\[]{}&!;:-%#@~<>/
 # Required
 gopherbot_slack_token:
 # Optional items below
 # OpenWeatherMap, for weather plugin
 gopherbot_owm_key:
+gopherbot_owm_units: imperial
+gopherbot_owm_country: us
 # Obtain imgflip credentials to activate the memes plugin
 gopherbot_imgflip_user:
 gopherbot_imgflip_pass:
@@ -19,9 +19,18 @@ gopherbot_imgflip_pass:
 gopherbot_duo_ikey:
 gopherbot_duo_skey:
 gopherbot_duo_host:
+gopherbot_duo_userval: emailUser
 # For sending email:
 gopherbot_email_from:
 gopherbot_email_host:
 gopherbot_email_auth: none # or plain for user/pass
 gopherbot_email_user:
 gopherbot_email_password:
+# For using a DynamoDB brain, AWS credentials
+gopherbot_dynamo_table:
+gopherbot_dynamo_key:
+gopherbot_dynamo_secret:
+gopherbot_dynamo_region: us-east-1
+# Stored in robot's install (home) dir
+gopherbot_ssh_private_key:
+gopherbot_config_repository:

@@ -1,5 +1,4 @@
 # ansible-generated file
-AdminContact: "{{ gopherbot_admin_name }}, <{{ gopherbot_admin_email }}>"
 # One-character alias the bot can be called by
 Alias: "{{ gopherbot_alias }}"
 # Protocol configuration - required
@@ -23,6 +22,15 @@ LocalPort: {{ gopherbot_local_port }}
 # Specify the mechanism for storing the robots memories. Currently only a
 # simple file-based brain is available. Be sure that
 # <local config dir>/brain is writable by the user the robot runs as.
+{% if gopherbot_dynamo_table is defined %}
+Brain: dynamo
+BrainConfig:
+  TableName: {{ gopherbot_dynamo_table }}
+  Region: {{ gopherbot_dynamo_region }}
+  AccessKeyID: {{ gopherbot_dynamo_key }}
+  SecretAccessKey: {{ gopherbot_dynamo_secret }}
+{% else %}
 Brain: file
 BrainConfig:
   BrainDirectory: brain
+{% endif %}

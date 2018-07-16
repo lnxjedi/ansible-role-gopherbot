@@ -1,7 +1,7 @@
 Gopherbot
 =========
 
-A role for installing Gopherbot on a CentOS7 host
+A role for installing Gopherbot on a CentOS7/Amazon Linux 2 host
 
 Role Variables
 --------------

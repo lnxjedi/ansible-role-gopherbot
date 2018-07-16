@@ -6,10 +6,10 @@ After=network.target
 
 [Service]
 Type=simple
-User=robot
-Group=robot
-WorkingDirectory={{ config.install_directory }}
-ExecStart={{ config.install_directory }}/gopherbot -plainlog {{ config.extra_args }}
+User={{ gopherbot_user }}
+Group={{ gopherbot_user }}
+WorkingDirectory={{ gopherbot_install_directory }}
+ExecStart={{ gopherbot_install_directory }}/gopherbot -plainlog {{ gopherbot_extra_args }}
 Restart=on-failure
 Environment=USER=robot HOME=/opt/robot HOSTNAME=%H
 KillMode=process

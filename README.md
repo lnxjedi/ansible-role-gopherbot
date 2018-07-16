@@ -6,14 +6,18 @@ A role for installing Gopherbot on a CentOS7/Amazon Linux 2 host
 Role Variables
 --------------
 
-
-
 A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+
+Role files
+----------
+Since `Gopherbot` makes heavy use of `git` and `ssh`, you may want to supply up to two ssh keypairs:
+* `files/<inventory_hostname>/robot/id_rsa*` - production ssh key, optionally encrypted
+* `files/<inventory_hostname>/deploy/id_rsa` - deployment key for initial cloning of configuration repository
 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+To avoid complex configuration around the service account user, your playbook should include a role for creating the user.
 
 Example Playbook
 ----------------
@@ -27,7 +31,7 @@ Including an example of how to use your role (for instance, with variables passe
 License
 -------
 
-BSD
+MIT
 
 Author Information
 ------------------

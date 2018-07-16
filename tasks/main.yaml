@@ -5,6 +5,19 @@
     path: "{{ gopherbot_install_dir }}"
     state: directory
     mode: 0755
+- name: Create the Gopherbot service account
+  block:
+  - group:
+      name: "{{ gopherbot_user}}"
+      system: yes
+  - user:
+      name: "{{ gopherbot_user }}"
+      group: "{{ gopherbot_user }}"
+      comment: Gopherbot
+      uid: "{{ gopherbot_uid | default(omit) }}"
+      system: yes
+      local: yes
+  when: gopherbot_create_user
 - name: Download Gopherbot archive
   unarchive:
     src: "{{ gopherbot_archive }}"
@@ -14,6 +27,8 @@
   file:
     path: "{{ gopherbot_install_dir }}/conf"
     state: directory
+    owner: "{{ gopherbot_user }}"
+  when: gopherbot_config_repository not defined
 - name: Install gopherbot.yaml
   template:
     src: gopherbot_yaml.j2

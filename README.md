@@ -41,7 +41,7 @@ To avoid complex configuration around the service account user, your playbook sh
 Advanced Example Playbook
 -------------------------
 
-This example playbook uses `singleplatform-eng.users` to create the user and group, and installs both a deploy key and (possibly encrypted) ssh private key. The public key for both of these should be set up as deployment keys for your **Gopherbot** configuration repository.
+This example playbook uses `singleplatform-eng.users` to create the user and group, and installs both a deploy key and (possibly encrypted) ssh private key. The public key for both of these should be set up as deployment keys for your **Gopherbot** configuration repository. Note that this playbook requires several `gopherbot_*` variables to be set (in e.g. `host_vars/`) instead of using role defaults that are only available within the role.
 
 ```yaml
 ---

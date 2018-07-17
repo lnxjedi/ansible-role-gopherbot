@@ -1,76 +1,69 @@
 ---
-# gopherbot listed in it's applications
-- name: Create Gopherbot install directory
+- name: Create Gopherbot history directory
   file:
-    path: "{{ gopherbot_install_dir }}"
+    path: "{{ gopherbot_history_directory }}"
     state: directory
-    mode: 0755
-- name: Create the Gopherbot service account
-  block:
-  - group:
-      name: "{{ gopherbot_user}}"
-      system: yes
-  - user:
-      name: "{{ gopherbot_user }}"
-      group: "{{ gopherbot_user }}"
-      comment: Gopherbot
-      uid: "{{ gopherbot_uid | default(omit) }}"
-      system: yes
-      local: yes
-  when: gopherbot_create_user
+    owner: "{{ gopherbot_user }}"
+    group: "{{ gopherbot_group }}"
+    mode: 0750
+- name: Create Gopherbot file brain directory
+  file:
+    path: "{{ gopherbot_brain_directory }}"
+    state: directory
+    owner: "{{ gopherbot_user }}"
+    group: "{{ gopherbot_group }}"
+    mode: 0750
+- name: Ensure Gopherbot config directory exists
+  file:
+    path: "{{ gopherbot_config_directory }}"
+    state: directory
+    owner: "{{ gopherbot_user }}"
+    group: "{{ gopherbot_group }}"
+    mode: 0750
+- name: Install EPEL for jq
+  yum: name=epel-release
+  when: ansible_distribution == "CentOS"
 - name: Install required packages
   yum:
     name:
     - unzip
+    - jq
+    - ruby
+    - python
+    - git
+- stat:
+    path: "{{ gopherbot_install_directory }}/lib"
+  register: gopher_lib
 - name: Download Gopherbot archive
   unarchive:
     src: "{{ gopherbot_archive }}"
     dest: "{{ gopherbot_install_dir }}"
-    remote_src: yes
-- name: Create installed config directory
-  file:
-    path: "{{ gopherbot_install_dir }}/conf"
-    state: directory
     owner: "{{ gopherbot_user }}"
-  when: gopherbot_config_repository is not defined
+    group: "{{ gopherbot_group }}"
+    mode: 0750
+    remote_src: yes
+  when: gopherbot_force_update or gopher_lib.stat.isdir is not defined
 - name: Install gopherbot.yaml
   template:
     src: gopherbot_yaml.j2
     dest: "{{ gopherbot_install_dir }}/conf/gopherbot.yaml"
-    owner: root
-    group: root
-    mode: 0644
-- name: Install duo.yaml config
-  template:
-    src: gopherbot_duo.j2
-    dest: "{{ gopherbot_install_dir }}/conf/plugins/duo.yaml"
-    owner: root
-    group: root
-    mode: 0644
-  when: gopherbot_duo_ikey is defined
-- name: Install memes.yaml config
-  template:
-    src: gopherbot_memes.j2
-    dest: "{{ gopherbot_install_dir }}/conf/plugins/memes.yaml"
-    owner: root
-    group: root
-    mode: 0644
-  when: gopherbot_imgflip_user is defined
-- name: Install weather.yaml config
-  template:
-    src: gopherbot_weather.j2
-    dest: "{{ gopherbot_install_dir }}/conf/plugins/weather.yaml"
-    owner: root
-    group: root
-    mode: 0644
-  when: gopherbot_owm_key is defined
+    owner: "{{ gopherbot_user }}"
+    group: "{{ gopherbot_group }}"
+    mode: 0640
+- name: Copy ssh-init.yaml config
+  copy:
+    src: files/ssh-init.yaml
+    dest: "{{ gopherbot_install_dir }}/conf/jobs/ssh-init.yaml"
+    owner: "{{ gopherbot_user }}"
+    group: "{{ gopherbot_group }}"
+    mode: 0640
 - name: Add systemd unit file for Gopherbot
   template:
     src: gopherbot_service.j2
     dest: /etc/systemd/system/{{ gopherbot_service_name }}.service
     owner: root
     group: root
-    mode: 0644
+    mode: 0640
   register: unit
 - name: Make sure Gopherbot runs on startup
   systemd: daemon_reload=yes name={{ gopherbot_service_name }} state=started enabled=yes

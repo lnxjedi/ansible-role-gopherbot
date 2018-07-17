@@ -7,11 +7,11 @@ After=network.target
 [Service]
 Type=simple
 User={{ gopherbot_user }}
-Group={{ gopherbot_user }}
+Group={{ gopherbot_group }}
 WorkingDirectory={{ gopherbot_install_directory }}
 ExecStart={{ gopherbot_install_directory }}/gopherbot -plainlog {{ gopherbot_extra_args }}
 Restart=on-failure
-Environment=USER=robot HOME=/opt/robot HOSTNAME=%H
+Environment=USER={{ gopherbot_user }} HOME={{ gopherbot_home }} HOSTNAME=%H
 KillMode=process
 # Give the robot plenty of time to finish plugins currently executing;
 # no new plugins will start after SIGTERM is caught.

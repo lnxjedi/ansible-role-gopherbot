@@ -1,6 +1,12 @@
 # ansible-generated file
+
+# This configuration is intentionally minimal, containing only required
+# secrets for the robot to function and update it's configuration. Most
+# configuration should be stored in the configuration directory, which
+# should be a git repository for your robot.
+
 # One-character alias the bot can be called by
-Alias: "{{ gopherbot_alias }}"
+Alias: {{ gopherbot_alias }}
 # Protocol configuration - required
 Protocol: slack
 ProtocolConfig:
@@ -8,15 +14,6 @@ ProtocolConfig:
   # Slack maximum message size is 4000 bytes; larger messages will be split
   # up into at most MaxMessageSplit separate messages, and then truncated
   MaxMessageSplit: 2
-{%if gopherbot_email_from is defined %}
-# Email user
-Email: {{ gopherbot_email_from }}
-MailConfig:
-  Mailhost: {{ gopherbot_email_host }}
-  Authtype: {{ gopherbot_email_auth }}
-  User: {{ gopherbot_email_user }}
-  Password: {{ gopherbot_email_password }}
-{% endif %}
 # Port to listen on for http/JSON api calls, for external plugins
 LocalPort: {{ gopherbot_local_port }}
 # Specify the mechanism for storing the robots memories. Currently only a
@@ -32,5 +29,26 @@ BrainConfig:
 {% else %}
 Brain: file
 BrainConfig:
-  BrainDirectory: brain
+  BrainDirectory: {{ gopherbot_brain_directory | default("brain") }}
 {% endif %}
+
+HistoryProvider: file
+HistoryConfig:
+  Directory: {{ gopherbot_history_directory }}
+
+ExternalPlugins:
+- Name: update
+  Path: plugins/update.sh
+ExternalJobs:
+- Name: ssh-init
+  Description: Set up an ssh-agent for the robot
+ExternalTasks:
+- Name: ssh
+  Description: Secure shell for remoting in to hosts
+  Path: /usr/bin/ssh
+- Name: git
+  Description: One SCM to Rule Them All
+  Path: /usr/bin/git
+- Name: ssh-agent
+  Description: ssh agent command for terminating the agent
+  Path: /usr/bin/ssh-agent

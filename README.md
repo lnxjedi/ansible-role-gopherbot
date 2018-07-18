@@ -16,15 +16,18 @@ gopherbot_brain_directory: /var/lib/gopherbot/brain
 gopherbot_history_directory: /var/log/gopherbot/history
 gopherbot_config_directory: "/usr/local/etc/gopherbot"
 gopherbot_home: "{{ gopherbot_install_dir }}"
+gopherbot_encrypt_brain: false
+## If a brain key is supplied, length must be > 32; can also be supplied interactively
+# gopherbot_brain_key:
 gopherbot_user: "gopherbot"
 gopherbot_group: "{{ gopherbot_user }}"
-gopherbot_extra_args:
+gopherbot_extra_args: # extra arguments supplied when running the daemon with systemd
 gopherbot_service_name: "gopherbot"
 gopherbot_local_port: 8880
 gopherbot_alias: ; # A single-char alias for the robot, one of: *+^$?\[]{}&!;:-%#@~<>/
-# Required
+## Required
 gopherbot_slack_token:
-# For using a DynamoDB brain, AWS credentials
+## For using a DynamoDB brain, AWS credentials
 # gopherbot_dynamo_table:
 # gopherbot_dynamo_key:
 # gopherbot_dynamo_secret:
@@ -36,7 +39,7 @@ Note that `gopherbot_force_update` should normally be used on the `ansible-playb
 Requirements
 ------------
 
-To avoid complex configuration around the service account user, your playbook should include a role for creating the user and group that will be used by **Gopherbot**.
+To avoid complex configuration around the service account user, your playbook should include a role or plays for creating the user and group that will be used by **Gopherbot**.
 
 Advanced Example Playbook
 -------------------------

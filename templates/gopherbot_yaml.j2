@@ -31,6 +31,10 @@ Brain: file
 BrainConfig:
   BrainDirectory: {{ gopherbot_brain_directory | default("brain") }}
 {% endif %}
+EncryptBrain: {{ gopherbot_encrypt_brain }}
+{% if gopherbot_brain_key is defined %}
+BrainKey: {{ gopherbot_brain_key }}
+{% endif %}
 
 HistoryProvider: file
 HistoryConfig:

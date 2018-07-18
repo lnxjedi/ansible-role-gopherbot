@@ -43,6 +43,7 @@
     mode: 0750
     remote_src: yes
   when: gopherbot_force_update or gopher_lib.stat.isdir is not defined
+  register: gopher_install
 - name: Install gopherbot.yaml
   template:
     src: gopherbot_yaml.j2
@@ -70,3 +71,4 @@
   when: unit.changed
 - name: Restart Gopherbot
   systemd: name={{ gopherbot_service_name }} state=restarted
+  when: gopher_install.changed

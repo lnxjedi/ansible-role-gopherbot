@@ -13,6 +13,13 @@
     owner: "{{ gopherbot_user }}"
     group: "{{ gopherbot_group }}"
     mode: 0750
+- name: Create Gopherbot WorkSpace
+  file:
+    path: "{{ gopherbot_workspace_directory }}"
+    state: directory
+    owner: "{{ gopherbot_user }}"
+    group: "{{ gopherbot_group }}"
+    mode: 0750
 - name: Ensure Gopherbot config directory exists
   file:
     path: "{{ gopherbot_config_directory }}"
@@ -48,13 +55,6 @@
   template:
     src: gopherbot_yaml.j2
     dest: "{{ gopherbot_install_dir }}/conf/gopherbot.yaml"
-    owner: "{{ gopherbot_user }}"
-    group: "{{ gopherbot_group }}"
-    mode: 0640
-- name: Copy ssh-init.yaml config
-  copy:
-    src: files/ssh-init.yaml
-    dest: "{{ gopherbot_install_dir }}/conf/jobs/ssh-init.yaml"
     owner: "{{ gopherbot_user }}"
     group: "{{ gopherbot_group }}"
     mode: 0640

@@ -11,7 +11,11 @@ Group={{ gopherbot_group }}
 WorkingDirectory={{ gopherbot_install_directory }}
 ExecStart={{ gopherbot_install_directory }}/gopherbot -plainlog {{ gopherbot_extra_args }}
 Restart=on-failure
-Environment=USER={{ gopherbot_user }} HOME={{ gopherbot_home }} HOSTNAME=%H
+Environment=USER={{ gopherbot_user }} HOME={{ gopherbot_home }} HOSTNAME=%H SLACK_TOKEN={{ gopherbot_slack_token }}
+{% if gopherbot_brain_key is defined %}
+Environment=GOPHER_BRAIN_KEY={{ gopherbot_brain_key }}
+{% endif %}
+
 KillMode=process
 # Give the robot plenty of time to finish plugins currently executing;
 # no new plugins will start after SIGTERM is caught.

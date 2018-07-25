@@ -10,7 +10,6 @@ Alias: {{ gopherbot_alias }}
 # Protocol configuration - required
 Protocol: slack
 ProtocolConfig:
-  SlackToken: "{{ gopherbot_slack_token }}"
   # Slack maximum message size is 4000 bytes; larger messages will be split
   # up into at most MaxMessageSplit separate messages, and then truncated
   MaxMessageSplit: 2
@@ -32,13 +31,11 @@ BrainConfig:
   BrainDirectory: {{ gopherbot_brain_directory | default("brain") }}
 {% endif %}
 EncryptBrain: {{ gopherbot_encrypt_brain }}
-{% if gopherbot_brain_key is defined %}
-BrainKey: {{ gopherbot_brain_key }}
-{% endif %}
 
 HistoryProvider: file
 HistoryConfig:
   Directory: {{ gopherbot_history_directory }}
+WorkSpace: {{ gopherbot_workspace_directory }}
 
 ExternalPlugins:
 - Name: update

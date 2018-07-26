@@ -71,4 +71,4 @@
   when: unit.changed
 - name: Restart Gopherbot
   systemd: name={{ gopherbot_service_name }} state=restarted
-  when: gopher_install.changed
+  when: gopher_install.changed or unit.changed

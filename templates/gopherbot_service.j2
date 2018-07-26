@@ -15,6 +15,9 @@ Environment=USER={{ gopherbot_user }} HOME={{ gopherbot_home }} HOSTNAME=%H SLAC
 {% if gopherbot_brain_key is defined %}
 Environment=GOPHER_BRAIN_KEY={{ gopherbot_brain_key }}
 {% endif %}
+{% if gopherbot_dynamo_key is defined %}
+Environment=BRAIN_AWS_ACCESS_KEY_ID={{ gopherbot_dynamo_key }} BRAIN_AWS_SECRET_ACCESS_KEY={{ gopherbot_dynamo_secret }}
+{% endif %}
 
 KillMode=process
 # Give the robot plenty of time to finish plugins currently executing;

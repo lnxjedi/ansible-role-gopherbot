@@ -12,11 +12,19 @@ gopherbot_version: "v1.1.5"
 gopherbot_platform: "linux"
 gopherbot_force_update: false
 gopherbot_install_dir: "/opt/gopherbot"
+## Where memories are stored for a file brain
 gopherbot_brain_directory: /var/lib/gopherbot/brain
+## Where job histories are kept
 gopherbot_history_directory: /var/log/gopherbot/history
+## Workspace for CI/CD operations
+gopherbot_workspace_directory:
+## Most scripts, plugins and config should be in a separate directory
+## managed as a git repository
 gopherbot_config_directory: "/usr/local/etc/gopherbot"
+## This value will be passed as HOME to plugins
 gopherbot_home: "{{ gopherbot_install_dir }}"
-gopherbot_encrypt_brain: false
+## This should be left true, and a brain key supplied below
+gopherbot_encrypt_brain: true
 ## If a brain key is supplied, length must be > 32; can also be supplied interactively
 # gopherbot_brain_key:
 gopherbot_user: "gopherbot"

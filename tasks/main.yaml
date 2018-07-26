@@ -1,4 +1,8 @@
 ---
+- name: Check brain settings
+  fail:
+    msg: "gopherbot_brain_key required when gopherbot_encrypt_brain is 'true'"
+  when: gopherbot_encrypt_brain and gopherbot_brain_key is not defined
 - name: Create Gopherbot history directory
   file:
     path: "{{ gopherbot_history_directory }}"

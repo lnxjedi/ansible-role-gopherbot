@@ -3,6 +3,13 @@
   fail:
     msg: "gopherbot_brain_key required when gopherbot_encrypt_brain is 'true'"
   when: gopherbot_encrypt_brain and gopherbot_brain_key is not defined
+- name: Create Gopherbot Install directory
+  file:
+    path: "{{ gopherbot_install_directory }}"
+    state: directory
+    owner: "{{ gopherbot_user }}"
+    group: "{{ gopherbot_group }}"
+    mode: 0750
 - name: Create Gopherbot history directory
   file:
     path: "{{ gopherbot_history_directory }}"
@@ -48,7 +55,7 @@
 - name: Download Gopherbot archive
   unarchive:
     src: "{{ gopherbot_archive }}"
-    dest: "{{ gopherbot_install_dir }}"
+    dest: "{{ gopherbot_install_directory }}"
     owner: "{{ gopherbot_user }}"
     group: "{{ gopherbot_group }}"
     mode: 0750
@@ -58,7 +65,7 @@
 - name: Install gopherbot.yaml
   template:
     src: gopherbot_yaml.j2
-    dest: "{{ gopherbot_install_dir }}/conf/gopherbot.yaml"
+    dest: "{{ gopherbot_install_directory }}/conf/gopherbot.yaml"
     owner: "{{ gopherbot_user }}"
     group: "{{ gopherbot_group }}"
     mode: 0640

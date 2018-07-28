@@ -49,7 +49,7 @@ To avoid complex configuration around the service account user, your playbook sh
 Advanced Example Playbook
 -------------------------
 
-This example playbook uses `singleplatform-eng.users` to create the user and group, and installs both a deploy key and (possibly encrypted) ssh private key. The public key for both of these should be set up as deployment keys for your **Gopherbot** configuration repository. Note that this playbook requires several `gopherbot_*` variables to be set (in e.g. `host_vars/`) instead of using role defaults that are only available within the role.
+This example playbook is from the LinuxJedi.org Ansible project for deploying Gopherbot. You can see the entire repository at: https://github.com/parsley42/deploy-gopherbot
 
 ```yaml
 ---
@@ -62,10 +62,17 @@ This example playbook uses `singleplatform-eng.users` to create the user and gro
 
 - hosts: "{{ target }}"
   name: Install Gopherbot
+  remote_user: build
   become: yes
   tasks:
-  - import_role:
-      name: singleplatform-eng.users
+  - name: Create robot private group
+    group:
+      name: "{{ gopherbot_group }}"
+      system: yes
+  - name: Create user for robot
+    user:
+      name: "{{ gopherbot_user }}"
+      system: yes
   - name: Create ssh directory
     file:
       path: "{{ gopherbot_home }}/.ssh"
@@ -75,12 +82,6 @@ This example playbook uses `singleplatform-eng.users` to create the user and gro
       mode: 0700
   - name: Clone the config repository
     block:
-    - copy:
-        src: "files/{{ inventory_hostname }}/deploy/id_rsa"
-        dest: "{{ gopherbot_home }}/.ssh/deploy_rsa"
-        owner: "{{ gopherbot_user }}"
-        group: "{{ gopherbot_group }}"
-        mode: 0600
     - yum:
         name: git
         state: present
@@ -92,14 +93,19 @@ This example playbook uses `singleplatform-eng.users` to create the user and gro
         mode: 0750
     - git:
         repo: "{{ gopherbot_config_repository }}"
-        accept_hostkey: yes
         dest: "{{ gopherbot_config_directory }}"
-        key_file: "{{ gopherbot_home }}/.ssh/deploy_rsa"
       become_user: "{{ gopherbot_user }}"
   - name: Install the robot's SSH key
     copy:
-        src: "files/{{ inventory_hostname }}/robot/id_rsa"
+        src: "files/{{ inventory_hostname }}/id_rsa"
         dest: "{{ gopherbot_home }}/.ssh/id_rsa"
+        owner: "{{ gopherbot_user }}"
+        group: "{{ gopherbot_group }}"
+        mode: 0600
+  - name: Install the robot's SSH config
+    copy:
+        src: "files/{{ inventory_hostname }}/ssh-config"
+        dest: "{{ gopherbot_home }}/.ssh/config"
         owner: "{{ gopherbot_user }}"
         group: "{{ gopherbot_group }}"
         mode: 0600

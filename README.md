@@ -8,38 +8,35 @@ Role Variables
 
 These are the roles vars and defaults:
 ```yaml
-gopherbot_version: "v1.1.5"
-gopherbot_platform: "linux"
-gopherbot_force_update: false
-gopherbot_install_dir: "/opt/gopherbot"
-## Where memories are stored for a file brain
-gopherbot_brain_directory: /var/lib/gopherbot/brain
-## Where job histories are kept
-gopherbot_history_directory: /var/log/gopherbot/history
-## Workspace for CI/CD operations
-gopherbot_workspace_directory:
-## Most scripts, plugins and config should be in a separate directory
-## managed as a git repository
-gopherbot_config_directory: "/usr/local/etc/gopherbot"
-## This value will be passed as HOME to plugins
-gopherbot_home: "{{ gopherbot_install_dir }}"
-## This should be left true, and a brain key supplied below
-gopherbot_encrypt_brain: true
-## If a brain key is supplied, length must be > 32; can also be supplied interactively
-# gopherbot_brain_key:
-gopherbot_user: "gopherbot"
-gopherbot_group: "{{ gopherbot_user }}"
-gopherbot_extra_args: # extra arguments supplied when running the daemon with systemd
-gopherbot_service_name: "gopherbot"
-gopherbot_local_port: 8880
-gopherbot_alias: ; # A single-char alias for the robot, one of: *+^$?\[]{}&!;:-%#@~<>/
-## Required
-gopherbot_slack_token:
+## Required Settings and suggested values
+# gopherbot_config_directory: "/usr/local/etc/gopherbot"
+# gopherbot_user: "gopherbot"
+# gopherbot_group: "{{ gopherbot_user }}"
+# gopherbot_slack_token:
+# gopherbot_encrypt_brain: false # set this if no brain key supplied
+
+## Optional / Suggested settings
+# gopherbot_brain_key: # string at least 32 chars long, or leave blank and supply interactively
 ## For using a DynamoDB brain, AWS credentials
 # gopherbot_dynamo_table:
 # gopherbot_dynamo_key:
 # gopherbot_dynamo_secret:
 # gopherbot_dynamo_region: us-east-1
+
+## Defaults that can be overridden
+gopherbot_version: "v1.1.5"
+gopherbot_platform: "linux"
+gopherbot_force_update: false
+gopherbot_install_dir: "/opt/gopherbot"
+gopherbot_brain_directory: "/var/lib/gopherbot/brain"
+gopherbot_history_directory: "/var/log/gopherbot/history"
+gopherbot_workspace_directory: "/var/lib/gopherbot/workspace"
+gopherbot_home: "{{ gopherbot_install_dir }}"
+gopherbot_encrypt_brain: true # see above
+gopherbot_extra_args:
+gopherbot_service_name: "gopherbot"
+gopherbot_local_port: 8880
+gopherbot_alias: ; # A single-char alias for the robot, one of: *+^$?\[]{}&!;:-%#@~<>/
 ```
 
 Note that `gopherbot_force_update` should normally be used on the `ansible-playbook` command line, e.g. `-e gopherbot_force_update=true` would update the installed archive.

@@ -1,24 +1,29 @@
-gopherbot_version: "v1.1.5"
-gopherbot_platform: "linux"
-gopherbot_force_update: false
-gopherbot_install_dir: "/opt/gopherbot"
-gopherbot_brain_directory: /var/lib/gopherbot/brain
-gopherbot_history_directory: /var/log/gopherbot/history
-gopherbot_workspace_directory: /var/lib/gopherbot/workspace
-gopherbot_config_directory: "/usr/local/etc/gopherbot"
-gopherbot_home: "{{ gopherbot_install_dir }}"
-gopherbot_encrypt_brain: true
-# gopherbot_brain_key: # string at least 32 chars long, or leave blank and supply interactively
-gopherbot_user: "gopherbot"
-gopherbot_group: "{{ gopherbot_user }}"
-gopherbot_extra_args:
-gopherbot_service_name: "gopherbot"
-gopherbot_local_port: 8880
-gopherbot_alias: ; # A single-char alias for the robot, one of: *+^$?\[]{}&!;:-%#@~<>/
-# Required
+## Required Settings and suggested values
+# gopherbot_config_directory: "/usr/local/etc/gopherbot"
+# gopherbot_user: "gopherbot"
+# gopherbot_group: "{{ gopherbot_user }}"
 # gopherbot_slack_token:
-# For using a DynamoDB brain, AWS credentials
+# gopherbot_encrypt_brain: false # set this if no brain key supplied
+
+## Optional / Suggested settings
+# gopherbot_brain_key: # string at least 32 chars long, or leave blank and supply interactively
+## For using a DynamoDB brain, AWS credentials
 # gopherbot_dynamo_table:
 # gopherbot_dynamo_key:
 # gopherbot_dynamo_secret:
 # gopherbot_dynamo_region: us-east-1
+
+## Defaults that can be overridden
+gopherbot_version: "v1.1.5"
+gopherbot_platform: "linux"
+gopherbot_force_update: false
+gopherbot_install_dir: "/opt/gopherbot"
+gopherbot_brain_directory: "/var/lib/gopherbot/brain"
+gopherbot_history_directory: "/var/log/gopherbot/history"
+gopherbot_workspace_directory: "/var/lib/gopherbot/workspace"
+gopherbot_home: "{{ gopherbot_install_dir }}"
+gopherbot_encrypt_brain: true # see above
+gopherbot_extra_args:
+gopherbot_service_name: "gopherbot"
+gopherbot_local_port: 8880
+gopherbot_alias: ; # A single-char alias for the robot, one of: *+^$?\[]{}&!;:-%#@~<>/

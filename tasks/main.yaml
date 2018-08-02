@@ -42,13 +42,13 @@
   yum: name=epel-release
   when: ansible_distribution == "CentOS"
 - name: Install required packages
-  yum:
-    name:
-    - unzip
-    - jq
-    - ruby
-    - python
-    - git
+  action: "{{ ansible_pkg_mgr }} name={{ item }} state=present"
+  with_items:
+  - unzip
+  - jq
+  - ruby
+  - python
+  - git
 - stat:
     path: "{{ gopherbot_install_directory }}/lib"
   register: gopher_lib

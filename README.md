@@ -51,6 +51,7 @@ Advanced Example Playbook
 
 This example playbook is from the LinuxJedi.org Ansible project for deploying Gopherbot. You can see the entire repository at: https://github.com/parsley42/deploy-gopherbot
 
+
 ```yaml
 ---
 - hosts: all
@@ -111,6 +112,15 @@ This example playbook is from the LinuxJedi.org Ansible project for deploying Go
         mode: 0600
   - import_role:
       name: lnxjedi.gopherbot
+```
+
+To download the role, create this `requirements.yaml` and run `ansible-galaxy install -r requirements.yaml`:
+
+```yaml
+---
+- src: https://github.com/lnxjedi/ansible-role-gopherbot
+  version: master
+  name: lnxjedi.gopherbot
 ```
 
 License

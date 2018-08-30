@@ -69,6 +69,7 @@
     owner: "{{ gopherbot_user }}"
     group: "{{ gopherbot_group }}"
     mode: 0640
+  register: gopherconf
 - name: Add systemd unit file for Gopherbot
   template:
     src: gopherbot_service.j2
@@ -82,4 +83,4 @@
   when: unit.changed
 - name: Restart Gopherbot
   systemd: name={{ gopherbot_service_name }} state=restarted
-  when: gopher_install.changed or unit.changed
+  when: gopher_install.changed or unit.changed or gopherconf.changed

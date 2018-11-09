@@ -1,8 +1,4 @@
 ---
-- name: Check brain settings
-  fail:
-    msg: "gopherbot_brain_key required when gopherbot_encrypt_brain is 'true'"
-  when: gopherbot_encrypt_brain and gopherbot_brain_key is not defined
 - name: Create Gopherbot Install directory
   file:
     path: "{{ gopherbot_install_directory }}"
@@ -62,14 +58,6 @@
     remote_src: yes
   when: gopherbot_force_update or gopher_lib.stat.isdir is not defined
   register: gopher_install
-- name: Install gopherbot.yaml
-  template:
-    src: gopherbot_yaml.j2
-    dest: "{{ gopherbot_install_directory }}/conf/gopherbot.yaml"
-    owner: "{{ gopherbot_user }}"
-    group: "{{ gopherbot_group }}"
-    mode: 0640
-  register: gopherconf
 - name: Add systemd unit file for Gopherbot
   template:
     src: gopherbot_service.j2
@@ -78,9 +66,11 @@
     group: root
     mode: 0640
   register: unit
+- name: Make sure daemon reloads on change
+  systemd: daemon_reload=yes
+  when: unit.changed
 - name: Make sure Gopherbot runs on startup
   systemd: daemon_reload=yes name={{ gopherbot_service_name }} state=started enabled=yes
-  when: unit.changed
 - name: Restart Gopherbot
   systemd: name={{ gopherbot_service_name }} state=restarted
-  when: gopher_install.changed or unit.changed or gopherconf.changed
+  when: gopher_install.changed or unit.changed

@@ -15,12 +15,7 @@ Environment=USER={{ gopherbot_user }} HOME={{ gopherbot_home }} HOSTNAME=%H
 Environment=GOPHER_BRAIN_DIRECTORY={{ gopherbot_brain_directory }}
 Environment=GOPHER_HISTORY_DIRECTORY={{ gopherbot_history_directory }}
 Environment=GOPHER_WORKSPACE_DIRECTORY={{ gopherbot_workspace_directory }}
-{% if gopherbot_config_repository is defined %}
-Environment=GOPHER_CUSTOM_REPOSITORY={{ gopherbot_config_repository }}
-{% endif %}
-{% for envvar in gopherbot_environment %}
-Environment={{ envvar }}
-{% endfor %}
+EnvironmentFile=/etc/gopherbot.env
 
 KillMode=process
 # Give the robot plenty of time to finish plugins currently executing;

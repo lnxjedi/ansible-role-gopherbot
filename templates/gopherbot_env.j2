@@ -1,0 +1,6 @@
+{% if gopherbot_config_repository is defined %}
+GOPHER_CUSTOM_REPOSITORY={{ gopherbot_config_repository }}
+{% endif %}
+{% for envvar in gopherbot_environment %}
+{{ envvar }}
+{% endfor %}

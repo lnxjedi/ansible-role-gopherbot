@@ -66,6 +66,14 @@
     group: root
     mode: 0640
   register: unit
+- name: Add environment file for secrets
+  template:
+    src: gopherbot_env.j2
+    dest: /etc/gopherbot.env
+    owner: root
+    group: root
+    mode: 0600
+  register: unit
 - name: Make sure daemon reloads on change
   systemd: daemon_reload=yes
   when: unit.changed

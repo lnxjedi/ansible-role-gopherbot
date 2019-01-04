@@ -1,6 +1,6 @@
-{% if gopherbot_config_repository is defined %}
-GOPHER_CUSTOM_REPOSITORY={{ gopherbot_config_repository }}
-{% endif %}
+GOPHER_WORKSPACE_DIRECTORY={{ gopherbot_workspace_directory }}
+GOPHER_HISTORY_DIRECTORY={{ gopherbot_history_directory }}
+GOPHER_CONFIGDIR={{ gopherbot_config_directory }}
 {% for envvar in gopherbot_environment %}
 {{ envvar }}
 {% endfor %}

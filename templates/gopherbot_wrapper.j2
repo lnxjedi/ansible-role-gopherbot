@@ -1,0 +1,20 @@
+#!/bin/bash
+# gopherbot wrapper script - workaround for starting a setuid-non-root executable
+# via systemd.
+
+{{ gopherbot_install_directory }}/gopherbot -plainlog {{ gopherbot_extra_args }} &
+GPROC=$!
+
+for SIGNAL in SIGTERM SIGINT SIGKILL SIGQUIT
+do
+        trap "kill -$SIGNAL $GPROC" $SIGNAL
+done
+
+wait $GPROC
+RET=$?
+echo "Gopherbot exiting with return code $RET"
+if [ $RET -ge 128 ]
+then
+        RET=0
+fi
+exit $RET

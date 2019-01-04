@@ -1,24 +1,40 @@
 ---
+- name: Create Gopherbot User and Group
+  block:
+  - group:
+      name: "{{ gopherbot_group }}"
+      gid: "{{ gopherbot_gid | default(omit) }}"
+  - user:
+      name: "{{ gopherbot_user }}"
+      uid: "{{ gopherbot_uid | default(omit) }}"
+      home: "{{ gopherbot_home | default(omit) }}"
 - name: Create Gopherbot Install directory
   file:
     path: "{{ gopherbot_install_directory }}"
     state: directory
-    owner: "{{ gopherbot_user }}"
-    group: "{{ gopherbot_group }}"
-    mode: 0750
+    owner: root
+    group: root
+    mode: 0755
+- name: Create Gopherbot run context directory
+  file:
+    path: "{{ gopherbot_run_directory }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
 - name: Create Gopherbot history directory
   file:
     path: "{{ gopherbot_history_directory }}"
     state: directory
-    owner: "{{ gopherbot_user }}"
-    group: "{{ gopherbot_group }}"
-    mode: 0750
+    owner: "{{ gopherbot_privilege_user }}"
+    group: root
+    mode: 0755
 - name: Create Gopherbot file brain directory
   file:
     path: "{{ gopherbot_brain_directory }}"
     state: directory
-    owner: "{{ gopherbot_user }}"
-    group: "{{ gopherbot_group }}"
+    owner: "{{ gopherbot_privilege_user }}"
+    group: root
     mode: 0750
 - name: Create Gopherbot WorkSpace
   file:
@@ -33,7 +49,7 @@
     state: directory
     owner: "{{ gopherbot_user }}"
     group: "{{ gopherbot_group }}"
-    mode: 0750
+    mode: 0755
 - name: Install EPEL for jq
   yum: name=epel-release
   when: ansible_distribution == "CentOS"
@@ -52,33 +68,49 @@
   unarchive:
     src: "{{ gopherbot_archive }}"
     dest: "{{ gopherbot_install_directory }}"
-    owner: "{{ gopherbot_user }}"
-    group: "{{ gopherbot_group }}"
-    mode: 0750
+    owner: root
+    group: root
+    mode: 0755
     remote_src: yes
   when: gopherbot_force_update or gopher_lib.stat.isdir is not defined
   register: gopher_install
+- name: Make executable setuid to priv user
+  file:
+    path: "{{ gopherbot_install_directory }}/gopherbot"
+    owner: "{{ gopherbot_privilege_user }}"
+    group: "{{ gopherbot_group }}"
+    mode: 04450
 - name: Add systemd unit file for Gopherbot
   template:
     src: gopherbot_service.j2
     dest: /etc/systemd/system/{{ gopherbot_service_name }}.service
     owner: root
     group: root
-    mode: 0640
+    mode: 0644
   register: unit
+- name: Add wrapper script for setuid operation
+  template:
+    src: gopherbot_wrapper.j2
+    dest: "{{ gopherbot_run_directory }}/gopherbot"
+    owner: root
+    group: root
+    mode: 0755
+  register: wrapper
 - name: Add environment file for secrets
   template:
     src: gopherbot_env.j2
-    dest: /etc/gopherbot.env
-    owner: root
+    dest: "{{ gopherbot_run_directory }}/.env"
+    owner: "{{ gopherbot_privilege_user }}"
     group: root
-    mode: 0600
-  register: unit
+    mode: 0400
+  register: botenv
 - name: Make sure daemon reloads on change
   systemd: daemon_reload=yes
   when: unit.changed
 - name: Make sure Gopherbot runs on startup
   systemd: daemon_reload=yes name={{ gopherbot_service_name }} state=started enabled=yes
 - name: Restart Gopherbot
-  systemd: name={{ gopherbot_service_name }} state=restarted
-  when: gopher_install.changed or unit.changed
+  block:
+  - systemd: name={{ gopherbot_service_name }} state=stopped
+  - systemd: name={{ gopherbot_service_name }} state=started
+  when: gopher_install.changed or unit.changed or wrapper.changed or botenv.changed

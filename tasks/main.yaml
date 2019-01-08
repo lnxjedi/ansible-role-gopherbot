@@ -34,7 +34,7 @@
     path: "{{ gopherbot_brain_directory }}"
     state: directory
     owner: "{{ gopherbot_privilege_user }}"
-    group: root
+    group: "{{ gopherbot_brain_group }}"
     mode: 0750
 - name: Create Gopherbot WorkSpace
   file:

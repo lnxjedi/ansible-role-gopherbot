@@ -28,3 +28,4 @@ gopherbot_history_directory: "/var/log/gopherbot/history"
 gopherbot_workspace_directory: "/var/lib/gopherbot/workspace"
 gopherbot_extra_args:
 gopherbot_service_name: "gopherbot"
+gopherbot_brain_group: root # {{ gopherbot_group }} if the robot backs up it's own brain
